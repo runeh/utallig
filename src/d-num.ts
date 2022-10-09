@@ -10,7 +10,7 @@ import {
   defaultRandomFloat,
 } from './common';
 
-function innerFNum(args: {
+function dNumInner(args: {
   randomFloat: RandomFloatFun;
   startYear: number;
   endYear: number;
@@ -31,6 +31,8 @@ function innerFNum(args: {
     individualNum.toString().padStart(3, '0'),
   ]
     .flatMap((e) => e.split(''))
+    // add 4 to first digit of d-num
+    .map((e, n) => (n === 0 ? Number(e) + 4 : e))
     .map((e) => Number(e));
 
   const control1 = mod11(fNumControl1Weights, digits);
@@ -43,7 +45,7 @@ function innerFNum(args: {
   return `${digits.join('')}${control1}${control2}`;
 }
 
-export function fNum(args: {
+export function dNum(args: {
   randomFloat?: RandomFloatFun;
   startYear?: number;
   endYear?: number;
@@ -55,9 +57,8 @@ export function fNum(args: {
   const gender = args.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
 
   let maxAttempts = 100;
-  // add an `attempt` function
   while (maxAttempts-- > 0) {
-    const res = innerFNum({
+    const res = dNumInner({
       endYear,
       gender,
       randomFloat,

@@ -4,6 +4,7 @@ export const femaleDigits = [0, 2, 4, 6, 8];
 export const maleDigits = [1, 3, 5, 7, 9];
 export const fNumControl1Weights = [3, 7, 6, 1, 8, 9, 4, 5, 2];
 export const fNumControl2Weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+export const defaultRandomFloat = () => Math.random();
 
 export type RandomFloatFun = typeof Math.random;
 
