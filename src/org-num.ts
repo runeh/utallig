@@ -10,7 +10,7 @@ const weights = [3, 2, 7, 6, 5, 4, 3, 2];
 
 export function orgNum(args?: {
   randomFloat?: RandomFloatFun;
-  prefix: string;
+  prefix?: string;
 }): string {
   const randomFloat = args?.randomFloat ?? (() => Math.random());
   const prefix = args?.prefix ?? '';

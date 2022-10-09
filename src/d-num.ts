@@ -46,15 +46,15 @@ function dNumInner(args: {
   return `${digits.join('')}${control1}${control2}`;
 }
 
-export function dNum(args: {
+export function dNum(args?: {
   randomFloat?: RandomFloatFun;
   startYear?: number;
   endYear?: number;
   gender?: 'f' | 'm';
 }): string {
-  const randomFloat = args.randomFloat ?? defaultRandomFloat;
-  const startYear = args.startYear ?? 1854;
-  const endYear = args.endYear ?? 2039;
-  const gender = args.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
+  const randomFloat = args?.randomFloat ?? defaultRandomFloat;
+  const startYear = args?.startYear ?? 1854;
+  const endYear = args?.endYear ?? 2039;
+  const gender = args?.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
   return attempt(() => dNumInner({ endYear, gender, randomFloat, startYear }));
 }

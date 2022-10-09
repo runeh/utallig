@@ -21,7 +21,11 @@ export function randomInt(
 ) {
   const min = Math.ceil(minInclusive);
   const max = Math.floor(maxInclusive + 1);
-  return Math.floor(randomFloat() * (max - min) + min);
+  const value = randomFloat();
+  if (value < 0 || value > 1) {
+    throw new Error('Random generator returned value outside of range 0..1');
+  }
+  return Math.floor(value * (max - min) + min);
 }
 
 export function mod11(weights: number[], digits: number[]) {
