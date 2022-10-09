@@ -1,15 +1,15 @@
 import {
   type RandomFloatFun,
   retrySym,
-  getRandomInt,
-  getBirthDate,
+  randomInt,
+  randomBirthDate,
   mod11,
-  pnumControl1Multipliers,
-  pnumControl2Multipliers,
-  getIndividualNumber,
+  fNumControl1Weights,
+  fNumControl2Weights,
+  randomIndividualNumber,
 } from './common';
 
-function innerMakeRandomPnum(args: {
+function innerFNum(args: {
   randomFloat: RandomFloatFun;
   startYear: number;
   endYear: number;
@@ -18,15 +18,14 @@ function innerMakeRandomPnum(args: {
   const randomFloat = args.randomFloat ?? (() => Math.random());
   const startYear = args.startYear ?? 1854;
   const endYear = args.endYear ?? 2039;
-  const gender =
-    args.gender ?? getRandomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
+  const gender = args.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
 
-  const { day, month, year } = getBirthDate({
+  const { day, month, year } = randomBirthDate({
     endYear,
     randomFloat,
     startYear,
   });
-  const individualNum = getIndividualNumber({ gender, randomFloat, year });
+  const individualNum = randomIndividualNumber({ gender, randomFloat, year });
 
   const digits = [
     day.toString().padStart(2, '0'),
@@ -37,8 +36,8 @@ function innerMakeRandomPnum(args: {
     .flatMap((e) => e.split(''))
     .map((e) => Number(e));
 
-  const control1 = mod11(pnumControl1Multipliers, digits);
-  const control2 = mod11(pnumControl2Multipliers, [...digits, control1]);
+  const control1 = mod11(fNumControl1Weights, digits);
+  const control2 = mod11(fNumControl2Weights, [...digits, control1]);
 
   if (control1 === 10 || control2 === 10) {
     return retrySym;
@@ -47,7 +46,7 @@ function innerMakeRandomPnum(args: {
   return `${digits.join('')}${control1}${control2}`;
 }
 
-export function makeRandomPnum(args: {
+export function fNum(args: {
   randomFloat?: RandomFloatFun;
   startYear?: number;
   endYear?: number;
@@ -56,12 +55,11 @@ export function makeRandomPnum(args: {
   const randomFloat = args.randomFloat ?? (() => Math.random());
   const startYear = args.startYear ?? 1854;
   const endYear = args.endYear ?? 2039;
-  const gender =
-    args.gender ?? getRandomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
+  const gender = args.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
 
   let maxAttempts = 100;
   while (maxAttempts-- > 0) {
-    const res = innerMakeRandomPnum({
+    const res = innerFNum({
       endYear,
       gender,
       randomFloat,

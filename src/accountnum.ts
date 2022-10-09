@@ -1,4 +1,4 @@
-import { type RandomFloatFun, retrySym, getRandomInt, mod11 } from './common';
+import { type RandomFloatFun, retrySym, randomInt, mod11 } from './common';
 
 const weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
@@ -7,10 +7,9 @@ function innerMakeRandomBankAccount(args: {
   registerNumber?: number;
 }): string | typeof retrySym {
   const { randomFloat, registerNumber } = args;
-  const register = registerNumber ?? getRandomInt(randomFloat, 0, 9999);
-  const accountGroup = getRandomInt(randomFloat, 0, 99);
-  const customerNumber = getRandomInt(randomFloat, 0, 9999);
-
+  const register = registerNumber ?? randomInt(randomFloat, 0, 9999);
+  const accountGroup = randomInt(randomFloat, 0, 99);
+  const customerNumber = randomInt(randomFloat, 0, 9999);
   const digits = [
     register.toString().padStart(4, '0'),
     accountGroup.toString().padStart(2, '0'),
