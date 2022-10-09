@@ -10,6 +10,7 @@ Useful for making mock data. The library will generate the following:
 - [Fødselesnummer][fnum] (fNum) - 11 number digit issued to Norwegian citizens
 - [d-nummer][dnum] (dNum) - 11 digit number issued to people allowed to live and
   work in Norway.
+- [KID-nummer] - varying length number used to identify digital invoices.
 
 ## Quick start
 
