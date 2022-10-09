@@ -4,6 +4,8 @@
     "module": "commonjs",
     "rootDir": "./src",
 
+    "esModuleInterop": true,
+
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
