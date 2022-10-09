@@ -1,4 +1,11 @@
-import { type RandomFloatFun, retrySym, randomInt, mod11 } from './common';
+import {
+  type RandomFloatFun,
+  retrySym,
+  randomInt,
+  mod11,
+  attempt,
+  defaultRandomFloat,
+} from './common';
 
 const weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
@@ -29,14 +36,6 @@ export function accountNum(args?: {
   registerNumber?: number;
 }) {
   const registerNumber = args?.registerNumber;
-  const randomFloat = args?.randomFloat ?? (() => Math.random());
-
-  let maxAttempts = 100;
-  while (maxAttempts-- > 0) {
-    const res = innerMakeAccountNum({ registerNumber, randomFloat });
-    if (res !== retrySym) {
-      return res;
-    }
-  }
-  throw new Error('Not able to find valid bank account in 100 attempts');
+  const randomFloat = args?.randomFloat ?? defaultRandomFloat;
+  return attempt(() => innerMakeAccountNum({ registerNumber, randomFloat }));
 }

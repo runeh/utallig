@@ -8,6 +8,7 @@ import {
   fNumControl2Weights,
   randomIndividualNumber,
   defaultRandomFloat,
+  attempt,
 } from './common';
 
 function dNumInner(args: {
@@ -55,18 +56,5 @@ export function dNum(args: {
   const startYear = args.startYear ?? 1854;
   const endYear = args.endYear ?? 2039;
   const gender = args.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
-
-  let maxAttempts = 100;
-  while (maxAttempts-- > 0) {
-    const res = dNumInner({
-      endYear,
-      gender,
-      randomFloat,
-      startYear,
-    });
-    if (res !== retrySym) {
-      return res;
-    }
-  }
-  throw new Error('Not able to find valid pnum in 100 attempts');
+  return attempt(() => dNumInner({ endYear, gender, randomFloat, startYear }));
 }

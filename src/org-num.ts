@@ -1,4 +1,10 @@
-import { type RandomFloatFun, randomInt, mod11 } from './common';
+import {
+  type RandomFloatFun,
+  randomInt,
+  mod11,
+  attempt,
+  retrySym,
+} from './common';
 
 const weights = [3, 2, 7, 6, 5, 4, 3, 2];
 
@@ -8,8 +14,7 @@ export function orgNum(args?: {
 }): string {
   const randomFloat = args?.randomFloat ?? (() => Math.random());
   const prefix = args?.prefix ?? '';
-  let maxAttempts = 100;
-  while (maxAttempts-- > 0) {
+  return attempt(() => {
     const orgNum = randomInt(randomFloat, 0, 99_999_999);
     const digits = orgNum
       .toString()
@@ -17,11 +22,7 @@ export function orgNum(args?: {
       .split('')
       .map((e, n) => prefix.charAt(n) || e)
       .map((e) => Number(e));
-
     const control = mod11(weights, digits);
-    if (control !== 10) {
-      return [...digits, control].join('');
-    }
-  }
-  throw new Error('Not able to find valid org num in 100 attempts');
+    return control !== 10 ? [...digits, control].join('') : retrySym;
+  });
 }

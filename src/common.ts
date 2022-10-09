@@ -85,3 +85,14 @@ function individualNumberRange(year: number): [min: number, max: number] {
     throw new Error(`Could not find number for year ${year}`);
   }
 }
+
+export function attempt<T>(fun: () => T | typeof retrySym, attempts = 100): T {
+  let maxAttempts = Math.abs(attempts);
+  while (maxAttempts-- > 0) {
+    const ret = fun();
+    if (ret !== retrySym) {
+      return ret;
+    }
+  }
+  throw new Error(`Not able to find legal value in ${attempts} attempts`);
+}
