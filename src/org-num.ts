@@ -2,7 +2,7 @@ import { type RandomFloatFun, randomInt, mod11 } from './common';
 
 const weights = [3, 2, 7, 6, 5, 4, 3, 2];
 
-export function makeRandomOrgNum(args?: {
+export function orgNum(args?: {
   randomFloat?: RandomFloatFun;
   prefix: string;
 }): string {

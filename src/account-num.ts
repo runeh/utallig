@@ -2,7 +2,7 @@ import { type RandomFloatFun, retrySym, randomInt, mod11 } from './common';
 
 const weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
-function innerMakeRandomBankAccount(args: {
+function innerMakeAccountNum(args: {
   randomFloat: RandomFloatFun;
   registerNumber?: number;
 }): string | typeof retrySym {
@@ -24,7 +24,7 @@ function innerMakeRandomBankAccount(args: {
   return `${digits.join('')}${control}`;
 }
 
-export function makeRandomBankAccount(args?: {
+export function accountNum(args?: {
   randomFloat: RandomFloatFun;
   registerNumber?: number;
 }) {
@@ -33,7 +33,7 @@ export function makeRandomBankAccount(args?: {
 
   let maxAttempts = 100;
   while (maxAttempts-- > 0) {
-    const res = innerMakeRandomBankAccount({ registerNumber, randomFloat });
+    const res = innerMakeAccountNum({ registerNumber, randomFloat });
     if (res !== retrySym) {
       return res;
     }
