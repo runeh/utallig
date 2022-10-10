@@ -1,6 +1,6 @@
 {
   "name": "utallig",
-  "version": "1.0.0-beta1",
+  "version": "1.0.0-beta2",
   "description": "Generate numbers used in Norwegian administration",
   "keywords": [
     "testing",
@@ -39,5 +39,11 @@
     "singleQuote": true,
     "trailingComma": "all",
     "proseWrap": "always"
-  }
+  },
+  "files": [
+    "./dist",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
 }

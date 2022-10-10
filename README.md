@@ -16,7 +16,7 @@ Useful for making mock data. The library will generate the following:
 generated number is in use by an individual or organization. No attempt is made
 to avoid this, and there is not way to look up used personal numbers.
 
-## Quick start
+## Installing
 
 ```
 npm install utallig
@@ -26,7 +26,7 @@ npm install utallig
 yarn install utallig
 ```
 
-### Fødselsnummer and D-nummer:
+## Fødselsnummer and D-nummer:
 
 The two functions work the same way and take the same arguments
 
@@ -55,7 +55,7 @@ The functions take an options object with the following optional properties:
 - `gender` - The gender of the person. This is encoded into the number. By
   default a random gender is chosen. Valid options are `f` and `m`.
 
-### Org number
+## Org number
 
 ```typescript
 import { orgNum } from 'utallig';
@@ -70,7 +70,7 @@ properties:
 - `prefix` - A string of numbers that will be used as the first digit(s) of the
   generated org numbers. Useful to get a particular range of numbers.
 
-### Account number
+## Account number
 
 The `accountNum` function accepts an options object with the following optional
 properties:
@@ -80,7 +80,7 @@ properties:
   that identifies the bank that has issued the account. See [the Norwegian BIC
   registry][bic] for the list of banks IDs.
 
-### Controlling the random generator
+## Controlling the random generator
 
 By default, the library uses the `Math.random()` built-in function in
 JavaScript. It's possible to pass in other random number generators. This can be
