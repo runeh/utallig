@@ -1,12 +1,13 @@
 {
   "name": "utallig",
-  "version": "1.0.0",
-  "description": "Generate numbers used in Norwegian administration for testing",
+  "version": "1.0.0-beta1",
+  "description": "Generate numbers used in Norwegian administration",
   "keywords": [
     "testing",
     "mocks"
   ],
   "author": "Rune Finstad Halvorsen <rune@runefh.dev>",
+  "repository": "github:runeh/utallig",
   "license": "Apache-2.0",
   "source": "src/index.ts",
   "main": "dist/index.js",
