@@ -3,8 +3,13 @@
   "version": "1.0.0-beta2",
   "description": "Generate numbers used in Norwegian administration",
   "keywords": [
-    "testing",
-    "mocks"
+    "d-nummer",
+    "fødselsnummer",
+    "mocks",
+    "organisasjonsnummer",
+    "orgnum",
+    "personnummer",
+    "testing"
   ],
   "author": "Rune Finstad Halvorsen <rune@runefh.dev>",
   "repository": "github:runeh/utallig",
