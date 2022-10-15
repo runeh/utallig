@@ -2,6 +2,7 @@ import { fnr as fNumValidate, dnr as dNumValidate } from '@navikt/fnrvalidator';
 import { fNum, dNum, orgNum, accountNum } from '../index';
 import norVal from 'norsk-validator';
 import seedrandom from 'seedrandom';
+import { kid } from '../kid';
 
 const fuzzingRuns = 10000;
 
@@ -144,4 +145,13 @@ describe('dNum', () => {
   });
 
   it.todo('parameters');
+});
+
+describe('kid', () => {
+  it('fuzzing', () => {
+    repeat(() => {
+      const num = kid({});
+      expect(norVal.kidnummer(num)).toEqual(true);
+    });
+  });
 });

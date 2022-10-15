@@ -28,6 +28,10 @@ export function randomInt(
   return Math.floor(value * (max - min) + min);
 }
 
+export function sum(digits: number[]): number {
+  return digits.reduce((acc, cur) => acc + cur, 0);
+}
+
 export function mod11(weights: number[], digits: number[]) {
   const sum = weights.reduce((acc, cur, index) => {
     const num = digits[index];
