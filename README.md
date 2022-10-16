@@ -11,6 +11,7 @@ Useful for making mock data. The library will generate the following:
   citizens.
 - [d-nummer][dnum] (dNum) - 11 digit temporary ID number issued to people
   allowed to live and work in Norway.
+- [KID] - Number used to identify customers when paying online
 
 **Caveat:** The generated numbers are random. Thus it's possible that a
 generated number is in use by an individual or organization. No attempt is made
@@ -79,6 +80,19 @@ properties:
 - `registerNumber` - A "registry number" for the bank. This is a 4 digit number
   that identifies the bank that has issued the account. See [the Norwegian BIC
   registry][bic] for the list of banks IDs.
+
+## KID number
+
+the `kid` function accepts an options object, with the following optional
+properties:
+
+- `randomFloat` - RNG function
+- `length` - The length the generated KID number should be. Allowed values are
+  3-25. By default, a random number in that range is generated.
+- `prefix` - A number to prefix the generated number with. If using `length`,
+  the length includes the prefix.
+- `algorithm` - KID numbers are validated using either mod10(luhn) or mod11
+  algorithms. By default, a random algorithm is chosen.
 
 ## Controlling the random generator
 

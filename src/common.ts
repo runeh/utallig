@@ -1,19 +1,32 @@
+export type RandomFloatFun = typeof Math.random;
 export const retrySym = Symbol('retry');
-export const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-export const femaleDigits = [0, 2, 4, 6, 8];
-export const maleDigits = [1, 3, 5, 7, 9];
-const fNumControl1Weights = [3, 7, 6, 1, 8, 9, 4, 5, 2];
-const fNumControl2Weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 export const defaultRandomFloat = () => Math.random();
 
-export type RandomFloatFun = typeof Math.random;
+const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const fNumControl1Weights = [3, 7, 6, 1, 8, 9, 4, 5, 2];
+const fNumControl2Weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
-// From https://learn.microsoft.com/en-us/office/troubleshoot/excel/determine-a-leap-year
+// fixme: get rid of these.
+const femaleDigits = [0, 2, 4, 6, 8];
+const maleDigits = [1, 3, 5, 7, 9];
+
+/**
+ * Determine if a given year is a leap year. Based on this documentation:
+ * From https://learn.microsoft.com/en-us/office/troubleshoot/excel/determine-a-leap-year
+ */
 export function getIsLeapYear(year: number) {
   return year % 4 === 0 && year % 100 === 0 && year % 400 === 0;
 }
 
-// From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+/**
+ * Generate a random integer between `minInclusive` and `maxInclusive`. Uses
+ * a random function that returns a float between 0 and 1 to do the work. Based
+ * on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
+ * @param randomFloat
+ * @param minInclusive
+ * @param maxInclusive
+ * @returns
+ */
 export function randomInt(
   randomFloat: RandomFloatFun,
   minInclusive: number,
@@ -37,13 +50,16 @@ export function getMod11ControlDigit(sum: number): number {
   return control === 11 ? 0 : control;
 }
 
+/**
+ * For each digit, multiply it with the weight at the same index and return the
+ * sum of all the multiplications.
+ */
 export function getWeightedSum(digits: number[], weights: number[]): number {
   if (digits.length !== weights.length) {
-    throw new Error('weights in input must be of same size');
+    throw new Error('weights and digits arrays must be the same length');
   }
-  return digits
-    .map((num, index) => num * weights[index]!)
-    .reduce((p, c) => p + c);
+  const multiplied = digits.map((num, index) => num * weights[index]!);
+  return sum(multiplied);
 }
 
 export function getFnumControlDigits(
@@ -59,7 +75,6 @@ export function getFnumControlDigits(
   return [controlDigit1, controlDigit2];
 }
 
-// fixme: rename to `randomBirthDate`
 export function randomBirthDate(args: {
   randomFloat: RandomFloatFun;
   startYear: number;
@@ -96,6 +111,11 @@ export function randomIndividualNumber(args: {
   return base - (base % 10) + last;
 }
 
+/**
+ * Get the allowed range for the "individual number" part of an f-num. The range
+ * is determined by the birth year of the person whose number is being
+ * generated.
+ */
 function individualNumberRange(year: number): [min: number, max: number] {
   if (year >= 1854 && year <= 1899) {
     return [500, 749];
@@ -108,6 +128,15 @@ function individualNumberRange(year: number): [min: number, max: number] {
   }
 }
 
+/**
+ * Call the `fun` callback. As long as the callback returns `retrySym`, keep
+ * retrying the call. If it returns any other value, return that value.
+ * If no valid value was returned after trying the call `attempts` times, then
+ * throw an error.
+ * @param fun
+ * @param attempts
+ * @returns
+ */
 export function attempt<T>(fun: () => T | typeof retrySym, attempts = 100): T {
   let maxAttempts = Math.abs(attempts);
   while (maxAttempts-- > 0) {
