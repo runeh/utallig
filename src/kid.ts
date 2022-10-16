@@ -17,7 +17,7 @@ function mod10Kid(args: {
   prefix: string;
 }): string {
   const { prefix, randomFloat } = args;
-  let length = args.length ?? randomInt(randomFloat, 2, 25);
+  let length = args.length ? args.length - 1 : randomInt(randomFloat, 2, 25);
 
   // fixme: move this test to top level
   if (prefix !== '') {
@@ -66,7 +66,7 @@ function mod11Kid(args: {
   prefix: string;
 }): string | typeof retrySym {
   const { randomFloat, prefix } = args;
-  let length = args.length ?? randomInt(randomFloat, 2, 25);
+  let length = args.length ? args.length - 1 : randomInt(randomFloat, 2, 25);
 
   // fixme: move this test to top level
   if (prefix !== '') {

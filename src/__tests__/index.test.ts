@@ -190,4 +190,6 @@ describe('kid', () => {
       expect(norVal.kidnummer(num, true, false)).toEqual(true);
     }, 100);
   });
+
+  it.todo('mix of length and prefix');
 });
