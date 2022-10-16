@@ -55,7 +55,3 @@ export function dNum(args?: {
   const gender = args?.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
   return attempt(() => dNumInner({ endYear, gender, randomFloat, startYear }));
 }
-
-export function getMod11ControlDigit(sum: number): number {
-  return 11 - (sum % 11);
-}

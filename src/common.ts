@@ -3,10 +3,10 @@ export const retrySym = Symbol('retry');
 export const defaultRandomFloat = () => Math.random();
 
 const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
 const fNumControl1Weights = [3, 7, 6, 1, 8, 9, 4, 5, 2];
 const fNumControl2Weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
-// fixme: get rid of these.
 const femaleDigits = [0, 2, 4, 6, 8];
 const maleDigits = [1, 3, 5, 7, 9];
 
@@ -22,10 +22,6 @@ export function getIsLeapYear(year: number) {
  * Generate a random integer between `minInclusive` and `maxInclusive`. Uses
  * a random function that returns a float between 0 and 1 to do the work. Based
  * on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#getting_a_random_integer_between_two_values
- * @param randomFloat
- * @param minInclusive
- * @param maxInclusive
- * @returns
  */
 export function randomInt(
   randomFloat: RandomFloatFun,
@@ -45,6 +41,9 @@ export function sum(digits: number[]): number {
   return digits.reduce((acc, cur) => acc + cur, 0);
 }
 
+/**
+ * Given a number, calculate the mod11 control digit for that number
+ */
 export function getMod11ControlDigit(sum: number): number {
   const control = 11 - (sum % 11);
   return control === 11 ? 0 : control;
@@ -75,6 +74,10 @@ export function getFnumControlDigits(
   return [controlDigit1, controlDigit2];
 }
 
+/**
+ * Generate a valid random birth date between `startYear` and `endYear`,
+ * inclusive.
+ */
 export function randomBirthDate(args: {
   randomFloat: RandomFloatFun;
   startYear: number;
