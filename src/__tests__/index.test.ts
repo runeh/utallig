@@ -2,12 +2,10 @@ import { fnr as fNumValidate, dnr as dNumValidate } from '@navikt/fnrvalidator';
 import { fNum, dNum, orgNum, accountNum } from '../index';
 import norVal from 'norsk-validator';
 import seedrandom from 'seedrandom';
-
-// import { verifyKidNumber } from 'norwegian-numbers';
 import validateLuhn from 'fast-luhn';
 import { kid } from '../kid';
 
-const fuzzingRuns = 10000;
+const fuzzingRuns = 4000;
 
 /**
  * Call fun a bunch of times
@@ -150,8 +148,8 @@ describe('dNum', () => {
   it.todo('parameters');
 });
 
-describe('kid, mod10', () => {
-  it('fuzzing', () => {
+describe('kid', () => {
+  it('Fuzzing mod10 ${fuzzingRuns} times', () => {
     const randomFloat = seedrandom('1');
     repeat(() => {
       const num = kid({ randomFloat, algorithm: 'mod10' });
@@ -159,29 +157,37 @@ describe('kid, mod10', () => {
     });
   });
 
-  it('prefix', () => {
+  it('prefix mod10', () => {
     const randomFloat = seedrandom('2');
     repeat(() => {
       const prefix = '0';
       const num = kid({ randomFloat, prefix, algorithm: 'mod10' });
       expect(num.startsWith(prefix)).toBe(true);
       expect(validateLuhn(num)).toEqual(true);
-    }, 1000);
+    }, 100);
 
     repeat(() => {
       const prefix = '12341234';
       const num = kid({ randomFloat, prefix, algorithm: 'mod10' });
       expect(num.startsWith(prefix)).toBe(true);
       expect(validateLuhn(num)).toEqual(true);
+    }, 100);
+  });
+
+  it('Fuzzing mod11 ${fuzzingRuns} times', () => {
+    const randomFloat = seedrandom('1');
+    repeat(() => {
+      const num = kid({ randomFloat, algorithm: 'mod11' });
+      expect(norVal.kidnummer(num, true, false)).toEqual(true);
     }, 1000);
   });
 
-  describe('kid, mod11', () => {
-    it.only('manual', () => {
-      const randomFloat = seedrandom('1');
-      const num = kid({ randomFloat, algorithm: 'mod11' });
-      console.log(num);
-      // expect(validateLuhn(num)).toEqual(true);
-    });
+  it('mod11 length times', () => {
+    const randomFloat = seedrandom('1');
+    repeat(() => {
+      const num = kid({ randomFloat, algorithm: 'mod11', length: 16 });
+      expect(num.length).toEqual(16);
+      expect(norVal.kidnummer(num, true, false)).toEqual(true);
+    }, 100);
   });
 });

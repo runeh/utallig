@@ -1,14 +1,17 @@
 import {
+  attempt,
   defaultRandomFloat,
   getMod11ControlDigit,
+  getWeightedSum,
   RandomFloatFun,
   randomInt,
+  retrySym,
   sum,
 } from './common';
 
 export type KidAlgorithm = 'mod10' | 'mod11';
 
-export function mod10Kid(args: {
+function mod10Kid(args: {
   randomFloat: RandomFloatFun;
   length?: number;
   prefix: string;
@@ -46,11 +49,22 @@ export function mod10Kid(args: {
   return [...digits, checkDigit].map((e) => e.toString()).join('');
 }
 
-export function mod11Kid(args: {
+/**
+ * Spec:
+ * https://www.nets.eu/no-nb/PublishingImages/Lists/Accordion%20%20OCR%20giro/AllItems/OCR%20giro%20Systemspesifikasjon.pdf
+ * The weights are 2,3,4,5,6,7, and then repeats from 2.
+ * The weights are applied from right to left. So the last digit has the weight
+ * 2.
+ */
+function mod11Weights(digits: number[]): number[] {
+  return digits.map((_, n) => (n % 6) + 2).reverse();
+}
+
+function mod11Kid(args: {
   randomFloat: RandomFloatFun;
   length?: number;
   prefix: string;
-}): string {
+}): string | typeof retrySym {
   const { randomFloat, prefix } = args;
   let length = args.length ?? randomInt(randomFloat, 2, 25);
 
@@ -68,13 +82,14 @@ export function mod11Kid(args: {
     .map((e, n) => prefix.charAt(n) || e)
     .map((e) => Number(e));
 
-  console.log('digs', digits);
-
-  const controlSum = sum(digits);
-  console.log('sum', controlSum);
-
+  const controlSum = getWeightedSum(digits, mod11Weights(digits));
   const control = getMod11ControlDigit(controlSum);
-  return [...digits, control].join('');
+
+  if (control === 10) {
+    return retrySym;
+  } else {
+    return [...digits, control].join('');
+  }
 }
 
 export function kid(args: {
@@ -88,13 +103,11 @@ export function kid(args: {
   const algorithm: KidAlgorithm =
     args.algorithm ?? (randomFloat() > 0.5 ? 'mod10' : 'mod11');
 
-  console.log('wut', algorithm, args.algorithm);
-  if (algorithm === 'mod10') {
-    return mod10Kid({ prefix, randomFloat, length: args.length });
-  } else {
-    return mod11Kid({ prefix, randomFloat, length: args.length });
-  }
+  return attempt(() => {
+    if (algorithm === 'mod10') {
+      return mod10Kid({ prefix, randomFloat, length: args.length });
+    } else {
+      return mod11Kid({ prefix, randomFloat, length: args.length });
+    }
+  });
 }
-
-// http://www.pgrocer.net/Cis51/mod11.html
-// bare ta lengden, gjør tingen og reverser?
