@@ -4,13 +4,25 @@ export type KidAlgorithm = 'mod10' | 'mod11';
 
 export function mod10Kid(args: {
   randomFloat: RandomFloatFun;
-  algorithm?: KidAlgorithm;
   length?: number;
   prefix?: string;
 }): string {
   const { randomFloat } = args;
-  const length = args.length ?? randomInt(randomFloat, 2, 25);
-  const digits = Array.from({ length }).map(() => randomInt(randomFloat, 0, 9));
+  const prefix = args.prefix ?? '';
+  let length = args.length ?? randomInt(randomFloat, 2, 25);
+
+  if (prefix !== '') {
+    if (prefix.length >= 24) {
+      throw new Error('Prefix is too long');
+    }
+
+    length = randomInt(randomFloat, prefix.length + 1, 25);
+  }
+
+  const digits = Array.from({ length })
+    .map(() => randomInt(randomFloat, 0, 9))
+    .map((e, n) => prefix.charAt(n) || e)
+    .map((e) => Number(e));
 
   const controlDigits = Array.from(digits)
     .reverse()
@@ -36,5 +48,5 @@ export function kid(args: {
   prefix?: string;
 }) {
   const randomFloat = args.randomFloat ?? defaultRandomFloat;
-  return mod10Kid({ randomFloat });
+  return mod10Kid({ randomFloat, prefix: args.prefix });
 }

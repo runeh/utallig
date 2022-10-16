@@ -4,7 +4,8 @@ import norVal from 'norsk-validator';
 import seedrandom from 'seedrandom';
 
 // import { verifyKidNumber } from 'norwegian-numbers';
-// import validateLuhn from 'fast-luhn';
+import validateLuhn from 'fast-luhn';
+import { kid } from '../kid';
 
 const fuzzingRuns = 10000;
 
@@ -149,12 +150,29 @@ describe('dNum', () => {
   it.todo('parameters');
 });
 
-// describe('kid', () => {
-//   it('fuzzing', () => {
-//     const randomFloat = seedrandom('1');
-//     repeat(() => {
-//       const num = kid({ randomFloat });
-//       expect(validateLuhn(num)).toEqual(true);
-//     });
-//   });
-// });
+describe('kid', () => {
+  it('fuzzing', () => {
+    const randomFloat = seedrandom('1');
+    repeat(() => {
+      const num = kid({ randomFloat });
+      expect(validateLuhn(num)).toEqual(true);
+    });
+  });
+
+  it('prefix', () => {
+    const randomFloat = seedrandom('2');
+    repeat(() => {
+      const prefix = '0';
+      const num = kid({ randomFloat, prefix });
+      expect(num.startsWith(prefix)).toBe(true);
+      expect(validateLuhn(num)).toEqual(true);
+    }, 1000);
+
+    repeat(() => {
+      const prefix = '12341234';
+      const num = kid({ randomFloat, prefix });
+      expect(num.startsWith(prefix)).toBe(true);
+      expect(validateLuhn(num)).toEqual(true);
+    }, 1000);
+  });
+});
