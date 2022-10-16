@@ -150,11 +150,11 @@ describe('dNum', () => {
   it.todo('parameters');
 });
 
-describe('kid', () => {
+describe('kid, mod10', () => {
   it('fuzzing', () => {
     const randomFloat = seedrandom('1');
     repeat(() => {
-      const num = kid({ randomFloat });
+      const num = kid({ randomFloat, algorithm: 'mod10' });
       expect(validateLuhn(num)).toEqual(true);
     });
   });
@@ -163,14 +163,14 @@ describe('kid', () => {
     const randomFloat = seedrandom('2');
     repeat(() => {
       const prefix = '0';
-      const num = kid({ randomFloat, prefix });
+      const num = kid({ randomFloat, prefix, algorithm: 'mod10' });
       expect(num.startsWith(prefix)).toBe(true);
       expect(validateLuhn(num)).toEqual(true);
     }, 1000);
 
     repeat(() => {
       const prefix = '12341234';
-      const num = kid({ randomFloat, prefix });
+      const num = kid({ randomFloat, prefix, algorithm: 'mod10' });
       expect(num.startsWith(prefix)).toBe(true);
       expect(validateLuhn(num)).toEqual(true);
     }, 1000);

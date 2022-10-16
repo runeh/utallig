@@ -38,7 +38,6 @@ export function getMod11ControlDigit(sum: number): number {
 }
 
 export function getWeightedSum(digits: number[], weights: number[]): number {
-  // const digits = input.split('').map(Number);
   if (digits.length !== weights.length) {
     throw new Error('weights in input must be of same size');
   }
