@@ -3,6 +3,8 @@ import { fNum, dNum, orgNum, accountNum } from '../index';
 import norVal from 'norsk-validator';
 import seedrandom from 'seedrandom';
 import { kid } from '../kid';
+// import { verifyKidNumber } from 'norwegian-numbers';
+import validateLuhn from 'fast-luhn';
 
 const fuzzingRuns = 10000;
 
@@ -149,9 +151,10 @@ describe('dNum', () => {
 
 describe('kid', () => {
   it('fuzzing', () => {
+    const randomFloat = seedrandom('1');
     repeat(() => {
-      const num = kid({});
-      expect(norVal.kidnummer(num)).toEqual(true);
+      const num = kid({ randomFloat });
+      expect(validateLuhn(num)).toEqual(true);
     });
   });
 });

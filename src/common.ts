@@ -2,8 +2,8 @@ export const retrySym = Symbol('retry');
 export const daysInMonth = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 export const femaleDigits = [0, 2, 4, 6, 8];
 export const maleDigits = [1, 3, 5, 7, 9];
-export const fNumControl1Weights = [3, 7, 6, 1, 8, 9, 4, 5, 2];
-export const fNumControl2Weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
+const fNumControl1Weights = [3, 7, 6, 1, 8, 9, 4, 5, 2];
+const fNumControl2Weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 export const defaultRandomFloat = () => Math.random();
 
 export type RandomFloatFun = typeof Math.random;
@@ -32,17 +32,31 @@ export function sum(digits: number[]): number {
   return digits.reduce((acc, cur) => acc + cur, 0);
 }
 
-export function mod11(weights: number[], digits: number[]) {
-  const sum = weights.reduce((acc, cur, index) => {
-    const num = digits[index];
-    if (typeof num !== 'number') {
-      throw new Error('Mismatch between length of number and weights');
-    }
-    return acc + cur * num;
-  }, 0);
+export function getMod11ControlDigit(sum: number): number {
+  return 11 - (sum % 11);
+}
 
-  const control = 11 - (sum % 11);
-  return control === 11 ? 0 : control;
+export function getWeightedSum(digits: number[], weights: number[]): number {
+  // const digits = input.split('').map(Number);
+  if (digits.length !== weights.length) {
+    throw new Error('weights in input must be of same size');
+  }
+  return digits
+    .map((num, index) => num * weights[index]!)
+    .reduce((p, c) => p + c);
+}
+
+export function getFnumControlDigits(
+  digits: number[],
+): [control1: number, control2: number] {
+  const controlSum1 = getWeightedSum(digits, fNumControl1Weights);
+  const controlDigit1 = getMod11ControlDigit(controlSum1);
+  const controlSum2 = getWeightedSum(
+    [...digits, controlDigit1],
+    fNumControl2Weights,
+  );
+  const controlDigit2 = getMod11ControlDigit(controlSum2);
+  return [controlDigit1, controlDigit2];
 }
 
 // fixme: rename to `randomBirthDate`

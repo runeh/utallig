@@ -10,14 +10,12 @@ export function mod10Kid(args: {
 }): string {
   const { randomFloat } = args;
   const length = args.length ?? randomInt(randomFloat, 2, 25);
-  const digits = Array.from({ length }).map((e) =>
-    randomInt(randomFloat, 0, 9),
-  );
+  const digits = Array.from({ length }).map(() => randomInt(randomFloat, 0, 9));
 
   const controlDigits = Array.from(digits)
     .reverse()
     .map((digit, index) => {
-      if (index % 0 === 0) {
+      if (index % 2 === 0) {
         const multiplied = digit * 2;
         return multiplied < 10 ? multiplied : multiplied - 9;
       } else {
@@ -27,6 +25,7 @@ export function mod10Kid(args: {
 
   const controlSum = sum(controlDigits);
   const checkDigit = (10 - (controlSum % 10)) % 10;
+
   return [...digits, checkDigit].map((e) => e.toString()).join('');
 }
 

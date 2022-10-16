@@ -3,12 +3,10 @@ import {
   retrySym,
   randomInt,
   randomBirthDate,
-  mod11,
-  fNumControl1Weights,
-  fNumControl2Weights,
   randomIndividualNumber,
   defaultRandomFloat,
   attempt,
+  getFnumControlDigits,
 } from './common';
 
 function dNumInner(args: {
@@ -36,14 +34,13 @@ function dNumInner(args: {
     .map((e, n) => (n === 0 ? Number(e) + 4 : e))
     .map((e) => Number(e));
 
-  const control1 = mod11(fNumControl1Weights, digits);
-  const control2 = mod11(fNumControl2Weights, [...digits, control1]);
+  const [controlDigit1, controlDigit2] = getFnumControlDigits(digits);
 
-  if (control1 === 10 || control2 === 10) {
+  if (controlDigit1 === 10 || controlDigit2 === 10) {
     return retrySym;
+  } else {
+    return `${digits.join('')}${controlDigit1}${controlDigit2}`;
   }
-
-  return `${digits.join('')}${control1}${control2}`;
 }
 
 export function dNum(args?: {
@@ -57,4 +54,8 @@ export function dNum(args?: {
   const endYear = args?.endYear ?? 2039;
   const gender = args?.gender ?? randomInt(randomFloat, 1, 2) === 1 ? 'f' : 'm';
   return attempt(() => dNumInner({ endYear, gender, randomFloat, startYear }));
+}
+
+export function getMod11ControlDigit(sum: number): number {
+  return 11 - (sum % 11);
 }

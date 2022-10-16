@@ -3,12 +3,10 @@ import {
   retrySym,
   randomInt,
   randomBirthDate,
-  mod11,
-  fNumControl1Weights,
-  fNumControl2Weights,
   randomIndividualNumber,
   defaultRandomFloat,
   attempt,
+  getFnumControlDigits,
 } from './common';
 
 function innerFNum(args: {
@@ -34,14 +32,13 @@ function innerFNum(args: {
     .flatMap((e) => e.split(''))
     .map((e) => Number(e));
 
-  const control1 = mod11(fNumControl1Weights, digits);
-  const control2 = mod11(fNumControl2Weights, [...digits, control1]);
+  const [controlDigit1, controlDigit2] = getFnumControlDigits(digits);
 
-  if (control1 === 10 || control2 === 10) {
+  if (controlDigit1 === 10 || controlDigit2 === 10) {
     return retrySym;
+  } else {
+    return `${digits.join('')}${controlDigit1}${controlDigit2}`;
   }
-
-  return `${digits.join('')}${control1}${control2}`;
 }
 
 export function fNum(args?: {
