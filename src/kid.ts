@@ -68,7 +68,11 @@ export function mod11Kid(args: {
     .map((e, n) => prefix.charAt(n) || e)
     .map((e) => Number(e));
 
+  console.log('digs', digits);
+
   const controlSum = sum(digits);
+  console.log('sum', controlSum);
+
   const control = getMod11ControlDigit(controlSum);
   return [...digits, control].join('');
 }
@@ -82,11 +86,15 @@ export function kid(args: {
   const randomFloat = args.randomFloat ?? defaultRandomFloat;
   const prefix = args.prefix ?? '';
   const algorithm: KidAlgorithm =
-    args.algorithm ?? randomFloat() > 0.5 ? 'mod10' : 'mod11';
+    args.algorithm ?? (randomFloat() > 0.5 ? 'mod10' : 'mod11');
 
+  console.log('wut', algorithm, args.algorithm);
   if (algorithm === 'mod10') {
     return mod10Kid({ prefix, randomFloat, length: args.length });
   } else {
     return mod11Kid({ prefix, randomFloat, length: args.length });
   }
 }
+
+// http://www.pgrocer.net/Cis51/mod11.html
+// bare ta lengden, gjør tingen og reverser?

@@ -175,4 +175,13 @@ describe('kid, mod10', () => {
       expect(validateLuhn(num)).toEqual(true);
     }, 1000);
   });
+
+  describe('kid, mod11', () => {
+    it.only('manual', () => {
+      const randomFloat = seedrandom('1');
+      const num = kid({ randomFloat, algorithm: 'mod11' });
+      console.log(num);
+      // expect(validateLuhn(num)).toEqual(true);
+    });
+  });
 });
