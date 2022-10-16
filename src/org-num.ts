@@ -1,9 +1,10 @@
 import {
   type RandomFloatFun,
   randomInt,
-  mod11,
   attempt,
   retrySym,
+  getWeightedSum,
+  getMod11ControlDigit,
 } from './common';
 
 const weights = [3, 2, 7, 6, 5, 4, 3, 2];
@@ -22,7 +23,8 @@ export function orgNum(args?: {
       .split('')
       .map((e, n) => prefix.charAt(n) || e)
       .map((e) => Number(e));
-    const control = mod11(weights, digits);
+    const sum = getWeightedSum(digits, weights);
+    const control = getMod11ControlDigit(sum);
     return control !== 10 ? [...digits, control].join('') : retrySym;
   });
 }

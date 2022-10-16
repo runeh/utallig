@@ -2,9 +2,10 @@ import {
   type RandomFloatFun,
   retrySym,
   randomInt,
-  mod11,
   attempt,
   defaultRandomFloat,
+  getWeightedSum,
+  getMod11ControlDigit,
 } from './common';
 
 const weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
@@ -24,7 +25,9 @@ function innerMakeAccountNum(args: {
   ]
     .flatMap((e) => e.split(''))
     .map((e) => Number(e));
-  const control = mod11(weights, digits);
+
+  const sum = getWeightedSum(digits, weights);
+  const control = getMod11ControlDigit(sum);
   if (control === 10) {
     return retrySym;
   }

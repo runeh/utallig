@@ -33,7 +33,8 @@ export function sum(digits: number[]): number {
 }
 
 export function getMod11ControlDigit(sum: number): number {
-  return 11 - (sum % 11);
+  const control = 11 - (sum % 11);
+  return control === 11 ? 0 : control;
 }
 
 export function getWeightedSum(digits: number[], weights: number[]): number {
