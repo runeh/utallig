@@ -12,7 +12,7 @@ const weights = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2];
 
 function innerMakeAccountNum(args: {
   randomFloat: RandomFloatFun;
-  registerNumber?: number;
+  registerNumber?: string;
 }): string | typeof retrySym {
   const { randomFloat, registerNumber } = args;
   const register = registerNumber ?? randomInt(randomFloat, 0, 9999);
@@ -36,7 +36,7 @@ function innerMakeAccountNum(args: {
 
 export function accountNum(args?: {
   randomFloat: RandomFloatFun;
-  registerNumber?: number;
+  registerNumber?: string;
 }) {
   const registerNumber = args?.registerNumber;
   const randomFloat = args?.randomFloat ?? defaultRandomFloat;

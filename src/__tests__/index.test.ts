@@ -50,7 +50,28 @@ describe('accountNum', () => {
       expect(norVal.kontonummer(num)).toEqual(true);
     });
   });
-  it.todo('registerNumber');
+
+  it('respects prefix', () => {
+    const randomFloat = seedrandom('1');
+
+    repeat(() => {
+      const num = accountNum({ randomFloat, registerNumber: '5432' });
+      expect(norVal.kontonummer(num)).toEqual(true);
+      expect(num.startsWith('5432')).toEqual(true);
+    }, 100);
+
+    repeat(() => {
+      const num = accountNum({ randomFloat, registerNumber: '9999' });
+      expect(norVal.kontonummer(num)).toEqual(true);
+      expect(num.startsWith('9999')).toEqual(true);
+    }, 100);
+
+    repeat(() => {
+      const num = accountNum({ randomFloat, registerNumber: '0001' });
+      expect(norVal.kontonummer(num)).toEqual(true);
+      expect(num.startsWith('0001')).toEqual(true);
+    }, 100);
+  });
 });
 
 describe('fNum', () => {
@@ -182,11 +203,23 @@ describe('kid', () => {
     }, 1000);
   });
 
-  it('mod11 length times', () => {
+  it('mod11 length', () => {
     const randomFloat = seedrandom('1');
     repeat(() => {
       const num = kid({ randomFloat, algorithm: 'mod11', length: 16 });
       expect(num.length).toEqual(16);
+      expect(norVal.kidnummer(num, true, false)).toEqual(true);
+    }, 100);
+
+    repeat(() => {
+      const num = kid({ randomFloat, algorithm: 'mod11', length: 7 });
+      expect(num.length).toEqual(7);
+      expect(norVal.kidnummer(num, true, false)).toEqual(true);
+    }, 100);
+
+    repeat(() => {
+      const num = kid({ randomFloat, algorithm: 'mod11', length: 22 });
+      expect(num.length).toEqual(22);
       expect(norVal.kidnummer(num, true, false)).toEqual(true);
     }, 100);
   });
